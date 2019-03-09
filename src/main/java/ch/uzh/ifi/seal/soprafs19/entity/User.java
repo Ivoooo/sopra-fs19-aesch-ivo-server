@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import java.util.Date;
+
 @Entity
 public class User implements Serializable {
 	
@@ -30,6 +32,9 @@ public class User implements Serializable {
 
 	@Column(nullable = false)
 	private UserStatus status;
+
+	@Column(nullable = false)
+	private Date creationDate;
 
 	public Long getId() {
 		return id;
@@ -69,6 +74,14 @@ public class User implements Serializable {
 
 	public void setStatus(UserStatus status) {
 		this.status = status;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
 	@Override
