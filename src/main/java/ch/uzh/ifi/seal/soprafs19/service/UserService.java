@@ -39,4 +39,10 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
+
+    public Boolean userExistsByUsername(String username){
+        //returns true if it already exists!
+        return this.userRepository.existsByUsername(username);
+    }
+
 }

@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 public class UserController {
 
@@ -22,8 +26,34 @@ public class UserController {
         return service.getUsers();
     }
 
+    /* original:*/
     @PostMapping("/users")
     User createUser(@RequestBody User newUser) {
         return this.service.createUser(newUser);
+    } /*
+    @PostMapping("/users")
+    ResponseEntity<User> createUser(@RequestBody User newUser) {
+        if(this.service.userExistsByUsername(newUser.getUsername())){
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        }
+        this.service.createUser(newUser);
+        return new ResponseEntity<>(new User(newUser), HttpStatus.OK);
+    }*/
+
+
+/* From online guide how to do it
+    @GetMapping("/{isbn}")
+
+    public ResponseEntity<Book> getBook(@PathVariable("isbn") String isbn) {
+
+        return bookRepository.findByIsbn(isbn)
+
+                .map(book -> new ResponseEntity<>(book, HttpStatus.OK))
+
+                .orElseThrow(() -> new BookNotFoundException(isbn));
+
     }
+
+*/
+
 }

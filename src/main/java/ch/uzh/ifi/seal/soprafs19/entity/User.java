@@ -13,7 +13,15 @@ import java.util.Date;
 
 @Entity
 public class User implements Serializable {
-	
+/*
+	public User(User user){
+		this.id = user.getId();
+		this.username = user.getUsername();
+		this.creationDate = user.getCreationDate();
+		this.status = user.getStatus();
+		this.password = user.getPassword();
+		this.token = user.getToken();
+	}*/
 
 	private static final long serialVersionUID = 1L;
 
