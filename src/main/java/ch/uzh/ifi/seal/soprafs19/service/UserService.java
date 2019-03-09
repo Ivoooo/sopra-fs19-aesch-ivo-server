@@ -45,4 +45,17 @@ public class UserService {
         return this.userRepository.existsByUsername(username);
     }
 
+    public boolean correctPassword(String username, String password) {
+        //returns true if the Password is correct!
+        if (this.userRepository.existsByUsername(username)) {
+            User user = this.userRepository.findByUsername(username);
+            return password.equals(user.getPassword());
+        }
+        return false;
+    }
+
+    public User getUserByUsername(String username) {
+        return this.userRepository.findByUsername(username);
+    }
+
 }

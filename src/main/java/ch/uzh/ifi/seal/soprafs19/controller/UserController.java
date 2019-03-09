@@ -26,19 +26,30 @@ public class UserController {
         return service.getUsers();
     }
 
-    /* original:*/
+/* original:
     @PostMapping("/users")
     User createUser(@RequestBody User newUser) {
         return this.service.createUser(newUser);
-    } /*
+    } */
     @PostMapping("/users")
     ResponseEntity<User> createUser(@RequestBody User newUser) {
         if(this.service.userExistsByUsername(newUser.getUsername())){
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
-        this.service.createUser(newUser);
-        return new ResponseEntity<>(new User(newUser), HttpStatus.OK);
-    }*/
+        return new ResponseEntity<>(this.service.createUser(newUser), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/users/login")
+    ResponseEntity<User> login(@RequestBody User test){
+        String username = test.getUsername();
+        String password = test.getPassword();
+
+        if (this.service.userExistsByUsername(username))
+            if (this.service.correctPassword(username, password)) {
+                return new ResponseEntity<>(this.service.getUserByUsername(username), HttpStatus.OK);
+            }
+        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+    }
 
 
 /* From online guide how to do it

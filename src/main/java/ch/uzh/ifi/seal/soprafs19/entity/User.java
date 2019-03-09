@@ -21,8 +21,8 @@ public class User implements Serializable {
 		this.status = user.getStatus();
 		this.password = user.getPassword();
 		this.token = user.getToken();
-	}*/
-
+	}
+*/
 	private static final long serialVersionUID = 1L;
 
 	@Id
