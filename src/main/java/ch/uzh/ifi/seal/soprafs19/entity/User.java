@@ -20,8 +20,8 @@ public class User implements Serializable {
 	private Long id;
 	
 	@Column(nullable = false) 
-	private String name;
-	
+	private String password;
+
 	@Column(nullable = false, unique = true) 
 	private String username;
 	
@@ -39,12 +39,12 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPassword(String name) {
+		this.password = name;
 	}
 
 	public String getUsername() {
