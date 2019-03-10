@@ -45,6 +45,11 @@ public class UserService {
         return this.userRepository.existsByUsername(username);
     }
 
+    public Boolean userExistsById(long userId) {
+        //returns true if it exists!
+        return this.userRepository.existsById(userId);
+    }
+
     public boolean correctPassword(String username, String password) {
         //returns true if the Password is correct!
         if (this.userRepository.existsByUsername(username)) {
@@ -56,6 +61,29 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         return this.userRepository.findByUsername(username);
+    }
+
+    public User getUserById(long userId) {
+        return this.userRepository.findById(userId);
+    }
+
+    public void updateUser(User user) {
+        //check if user even exists
+        if (!userExistsById(user.getId())) {
+            return;
+        }
+
+        //update necessary parts
+        User x = getUserById(user.getId());
+        if (user.getUsername() != null) {
+            x.setUsername(user.getUsername());
+        }
+        if (user.getBirthday() != null) {
+            x.setBirthday(user.getBirthday());
+        }
+
+        //actually update
+        this.userRepository.save(x);
     }
 
 }

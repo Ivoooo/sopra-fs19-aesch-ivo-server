@@ -51,6 +51,29 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
     }
 
+    @GetMapping("/user/{userId}")
+    ResponseEntity<User> getUserProfile(@RequestBody long userId) {
+        if (this.service.userExistsById(userId)) {
+            return new ResponseEntity<>(this.service.getUserById(userId), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/user/{userId}")
+    ResponseEntity<User> editUserProfile(@RequestBody User user) {
+        if (this.service.userExistsById(user.getId())) {
+            if (this.service.correctPassword(user.getUsername(), user.getPassword())) {
+                this.service.updateUser(user);
+                //success
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            }
+            //if a user wants to edit someone else's profile
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+        //if the userId doesn't exist
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
 
 /* From online guide how to do it
     @GetMapping("/{isbn}")
