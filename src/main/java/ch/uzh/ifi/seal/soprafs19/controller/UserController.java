@@ -36,7 +36,7 @@ public class UserController {
         if(this.service.userExistsByUsername(newUser.getUsername())){
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }
-        return new ResponseEntity<>(this.service.createUser(newUser), HttpStatus.OK);
+        return new ResponseEntity<>(this.service.createUser(newUser), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/users/login")
@@ -51,7 +51,7 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     ResponseEntity<User> getUserProfile(@RequestBody long userId) {
         if (this.service.userExistsById(userId)) {
             return new ResponseEntity<>(this.service.getUserById(userId), HttpStatus.OK);
@@ -59,10 +59,13 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/user/{userId}")
+    @PutMapping("/users/{userId}")
     ResponseEntity<User> editUserProfile(@RequestBody User user) {
         if (this.service.userExistsById(user.getId())) {
-            if (this.service.correctPassword(user.getUsername(), user.getPassword())) {
+            //since the username could've been change we need to do this to find the original username
+            String username = this.service.getUserById(user.getId()).getUsername();
+
+            if (this.service.correctPassword(username, user.getPassword())) {
                 this.service.updateUser(user);
                 //success
                 return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
