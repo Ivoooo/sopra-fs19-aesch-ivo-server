@@ -69,11 +69,13 @@ public class UserController {
 
             if (this.service.checkUser(user)) {
 
-                this.service.updateUser(user);
-                //success
-                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                if(user.getUsername() == null || !this.service.userExistsByUsername(user.getUsername())) {
+                    this.service.updateUser(user);
+                    //success
+                    return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                }
             }
-            //if a user wants to edit someone else's profile or Password was wrong
+            //if credentials (token+password) were wrong or username was already taken
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         //if the userId doesn't exist
