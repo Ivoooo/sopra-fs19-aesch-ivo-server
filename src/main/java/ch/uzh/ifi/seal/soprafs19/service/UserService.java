@@ -68,7 +68,7 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        //check if user even exists
+        //check if user already exists
         if (!userExistsById(user.getId())) {
             return;
         }

@@ -59,6 +59,7 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/users/{userId}")
     ResponseEntity<User> editUserProfile(@RequestBody User user) {
         if (this.service.userExistsById(user.getId())) {
