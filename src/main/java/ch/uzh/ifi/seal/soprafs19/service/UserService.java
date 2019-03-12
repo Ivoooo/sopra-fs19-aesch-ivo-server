@@ -86,4 +86,15 @@ public class UserService {
         this.userRepository.save(x);
     }
 
+    public boolean checkUser(User toCheck) {
+        //checks the users Token and Password for validity
+        //returns true if both are correct!
+        if (this.userRepository.existsByToken(toCheck.getToken())) {
+            User ogUser = this.userRepository.findByToken(toCheck.getToken());
+            String ogPassword = ogUser.getPassword();
+            return ogPassword.equals(toCheck.getPassword());
+        }
+        return false;
+    }
+
 }

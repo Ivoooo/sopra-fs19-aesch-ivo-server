@@ -62,16 +62,18 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/users/{userId}")
     ResponseEntity<User> editUserProfile(@RequestBody User user) {
-        if (this.service.userExistsById(user.getId())) {
-            //since the username could've been change we need to do this to find the original username
-            String username = this.service.getUserById(user.getId()).getUsername();
+        //needs the Token and Password to confirm validity
+        //send changed birthday and/or username to update
 
-            if (this.service.correctPassword(username, user.getPassword())) {
+        if (this.service.userExistsById(user.getId())) {
+
+            if (this.service.checkUser(user)) {
+
                 this.service.updateUser(user);
                 //success
                 return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
             }
-            //if a user wants to edit someone else's profile
+            //if a user wants to edit someone else's profile or Password was wrong
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         //if the userId doesn't exist
