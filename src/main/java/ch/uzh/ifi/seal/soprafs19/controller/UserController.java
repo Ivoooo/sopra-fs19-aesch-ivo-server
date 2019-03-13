@@ -32,34 +32,42 @@ public class UserController {
     @PostMapping("/users")
     User createUser(@RequestBody User newUser) {
         return this.service.createUser(newUser);
-    } */
+    }*/
     @PostMapping("/users")
     ResponseEntity<User> createUser(@RequestBody User newUser) {
         if(this.service.userExistsByUsername(newUser.getUsername())){
-            // old return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            //old return new ResponseEntity<>(null, HttpStatus.CONFLICT);
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists.");
         }
-        return new ResponseEntity<>(this.service.createUser(newUser), HttpStatus.CREATED);
+        else {
+            return new ResponseEntity<>(this.service.createUser(newUser), HttpStatus.CREATED);
+        }
     }
 
     @PostMapping(value = "/users/login")
-    ResponseEntity<User> login(@RequestBody User test){
+    ResponseEntity<User> login(@RequestBody User test) {
         String username = test.getUsername();
         String password = test.getPassword();
 
-        if (this.service.userExistsByUsername(username))
+        if (this.service.userExistsByUsername(username)) {
             if (this.service.correctPassword(username, password)) {
                 return new ResponseEntity<>(this.service.getUserByUsername(username), HttpStatus.OK);
+            } else {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password");
             }
-        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username doesn't exist");
+        }
     }
 
+
     @GetMapping("/users/{userId}")
-    ResponseEntity<User> getUserProfile(@RequestBody long userId) {
+    ResponseEntity<User> getUserProfile(@PathVariable long userId) {
         if (this.service.userExistsById(userId)) {
             return new ResponseEntity<>(this.service.getUserById(userId), HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        // old return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The UserId doesn't exist");
     }
 
     @CrossOrigin(origins = "*")
@@ -68,6 +76,21 @@ public class UserController {
         //needs the Token and Password to confirm validity
         //send changed birthday and/or username to update
 
+        if (this.service.checkUser(user)) {
+            if (this.service.userExistsById(user.getId())) {
+                if(user.getUsername() == null || !this.service.userExistsByUsername(user.getUsername())) {
+                    this.service.updateUser(user);
+                    //success
+                    return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+                }
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists with this name");
+            }
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "UserId doesn't exist");
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credentials are wrong");
+
+
+        /* old
         if (this.service.userExistsById(user.getId())) {
 
             if (this.service.checkUser(user)) {
@@ -82,7 +105,7 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         //if the userId doesn't exist
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); */
     }
 
 
