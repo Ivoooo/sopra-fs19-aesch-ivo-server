@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.server.ResponseStatusException;
 
+import org.hibernate.*;
+
 @RestController
 public class UserController {
 
