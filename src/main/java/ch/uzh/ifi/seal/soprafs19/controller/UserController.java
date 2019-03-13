@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.server.ResponseStatusException;
+
 @RestController
 public class UserController {
 
@@ -34,7 +36,8 @@ public class UserController {
     @PostMapping("/users")
     ResponseEntity<User> createUser(@RequestBody User newUser) {
         if(this.service.userExistsByUsername(newUser.getUsername())){
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            // old return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists.");
         }
         return new ResponseEntity<>(this.service.createUser(newUser), HttpStatus.CREATED);
     }
