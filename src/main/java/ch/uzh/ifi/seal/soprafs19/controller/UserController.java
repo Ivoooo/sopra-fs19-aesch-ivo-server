@@ -59,7 +59,7 @@ public class UserController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*")
     @PutMapping("/users/{userId}")
     ResponseEntity<User> editUserProfile(@RequestBody User user) {
         //needs the Token and Password to confirm validity
