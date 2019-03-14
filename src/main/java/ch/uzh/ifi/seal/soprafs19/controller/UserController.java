@@ -55,10 +55,10 @@ public class UserController {
             if (this.service.correctPassword(username, password)) {
                 return new ResponseEntity<>(this.service.getUserByUsername(username), HttpStatus.OK);
             } else {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Password");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong Password");
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username doesn't exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username doesn't exist");
         }
     }
 
@@ -75,7 +75,7 @@ public class UserController {
     @CrossOrigin(origins = "*")
     @PutMapping("/users/{userId}")
     public ResponseEntity<User> editUserProfile(@RequestBody User user) {
-        //needs the Token and Password to confirm validity
+        //needs the ID, Token and Password to confirm validity
         //send changed birthday and/or username to update
 
         if (this.service.checkUser(user)) {
