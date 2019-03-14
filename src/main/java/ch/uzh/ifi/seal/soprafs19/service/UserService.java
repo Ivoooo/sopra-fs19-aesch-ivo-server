@@ -68,6 +68,9 @@ public class UserService {
     }
 
     public void updateUser(User user) {
+        //updates the user's Birthday and Username
+        //takes the id to identify which one to update
+
         //check if user already exists
         if (!userExistsById(user.getId())) {
             return;
