@@ -36,7 +36,7 @@ public class UserController {
         return this.service.createUser(newUser);
     }*/
     @PostMapping("/users")
-    ResponseEntity<User> createUser(@RequestBody User newUser) {
+    public ResponseEntity<User> createUser(@RequestBody User newUser) {
         if(this.service.userExistsByUsername(newUser.getUsername())){
             //old return new ResponseEntity<>(null, HttpStatus.CONFLICT);
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists.");
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/users/login")
-    ResponseEntity<User> login(@RequestBody User test) {
+    public ResponseEntity<User> login(@RequestBody User test) {
         String username = test.getUsername();
         String password = test.getPassword();
 
@@ -64,7 +64,7 @@ public class UserController {
 
 
     @GetMapping("/users/{userId}")
-    ResponseEntity<User> getUserProfile(@PathVariable long userId) {
+    public ResponseEntity<User> getUserProfile(@PathVariable long userId) {
         if (this.service.userExistsById(userId)) {
             return new ResponseEntity<>(this.service.getUserById(userId), HttpStatus.OK);
         }
@@ -74,7 +74,7 @@ public class UserController {
 
     @CrossOrigin(origins = "*")
     @PutMapping("/users/{userId}")
-    ResponseEntity<User> editUserProfile(@RequestBody User user) {
+    public ResponseEntity<User> editUserProfile(@RequestBody User user) {
         //needs the Token and Password to confirm validity
         //send changed birthday and/or username to update
 
